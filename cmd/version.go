@@ -17,8 +17,8 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of Go_Babanas",
-	Long:  `Print the version number and the create date of Go_Babanas`,
+	Short: "Print the version number of this binary file",
+	Long:  `Print the version number and the create date of this binary file`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("version=%s, date=%s", version, date)
 	},
