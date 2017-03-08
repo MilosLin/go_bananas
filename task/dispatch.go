@@ -3,6 +3,7 @@ package task
 import (
 	"flag"
 	"fmt"
+	"strings"
 )
 
 /**
@@ -19,9 +20,8 @@ func Dispatch(name, argu string) {
 		f := flag.NewFlagSet("ask", flag.ExitOnError)
 		f.StringVar(&p1, "p1", "default", "paramter 1")
 		f.IntVar(&p2, "p2", 5, "paramter 2")
-		f.Parse([]string{argu})
+		f.Parse(strings.Fields(argu))
 		fmt.Printf("\np1=%v \np2=%v\n", p1, p2)
-		//fmt.Printf("name=%v argu=%v", name, argu)
 	default:
 		fmt.Printf("dispatch default:%s.", name)
 	}
@@ -36,7 +36,7 @@ func Dispatch(name, argu string) {
 func IncognitoDispatch(name string, argu []string) {
 	switch name {
 	case "corbaArgu":
-		fmt.Printf("naem=%v argu=%v", name, argu)
+		fmt.Printf("name=%v argu=%v", name, argu)
 		fmt.Println("corbaArgu")
 	default:
 		fmt.Printf("dispatch default:%s.", name)
