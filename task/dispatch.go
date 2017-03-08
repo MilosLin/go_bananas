@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+
+	"github.com/MilosLin/go_bananas/core/log"
 )
 
 /**
@@ -13,6 +15,7 @@ import (
  *
  */
 func Dispatch(name, argu string) {
+
 	switch name {
 	case "parseflagstr": //flag字串解析
 		var p1 string
@@ -22,6 +25,28 @@ func Dispatch(name, argu string) {
 		f.IntVar(&p2, "p2", 5, "paramter 2")
 		f.Parse(strings.Fields(argu))
 		fmt.Printf("\np1=%v \np2=%v\n", p1, p2)
+		//io, _, e := zap.Open("/home/work/go/src/github.com/MilosLin/go_bananas/test.log")
+
+		//fmt.Printf("open error %v\n", e)
+
+		log.Inst("root").Debug("debug")
+		log.Inst("root").Info("Info")
+		log.Inst("root").Warn("Warn")
+		log.Inst("root").Error("Error")
+		//log.Fatal("Fatal")
+		/*logger, _ := zap.NewProduction(
+			zap.ErrorOutput(io),
+		)
+		zapcore.AddSync(io)
+		zapcore.NewJSONEncoder(cfg)
+		sugar := logger.Sugar()
+		sugar.Infow("Failed to fetch URL.",
+			// Structured context as loosely-typed key-value pairs.
+			"url", "url-string",
+			"attempt", "retryNum",
+			"backoff", "time.Second",
+		)
+		sugar.Infof("Failed to fetch URL: %s", "the url")*/
 	default:
 		fmt.Printf("dispatch default:%s.", name)
 	}

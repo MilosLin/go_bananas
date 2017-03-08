@@ -1,0 +1,68 @@
+{
+    "api":{
+        "listen_port": 9215,
+        "inactivity_timeout": 1200
+    },
+    "web":{
+        "listen_port": 1500
+    },
+    "database": {
+        "query_limit": 500000,
+        "max_open_conns": 50,
+        "max_idle_conns": 20,
+        "conn_max_life_time": 60,
+        "game_db_m": {
+            "db": "game_db",
+            "account": "root",
+            "password": "root",
+            "ip": "127.0.0.1",
+            "port": 3306
+        },
+        "game_db_s": {
+            "db": "game_db",
+            "account": "root",
+            "password": "root",
+            "ip": "127.0.0.1",
+            "port": 3306
+        },
+        "record_db_m": {
+            "db": "record_db",
+            "account": "root",
+            "password": "root",
+            "ip": "127.0.0.1",
+            "port": 3306
+        },
+        "record_db_s": {
+            "db": "record_db",
+            "account": "root",
+            "password": "root",
+            "ip": "127.0.0.1",
+            "port": 3306
+        },
+        "backstage_db_m": {
+            "db": "backstage_db",
+            "account": "root",
+            "password": "root",
+            "ip": "127.0.0.1",
+            "port": 3306
+        },
+        "backstage_db_s": {
+            "db": "backstage_db",
+            "account": "root",
+            "password": "root",
+            "ip": "127.0.0.1",
+            "port": 3306
+        }
+    },
+    "log": {
+        "root": {
+            "encode_logs_as_json": false,
+            "file_logging_enabled": true,
+            "directory": "/home/work/go/src/github.com/MilosLin/go_bananas/log",
+            "filename": "root.log",
+            "max_size":    50,
+            "max_backups": 4,
+            "max_age":     3
+        }
+    }
+}
