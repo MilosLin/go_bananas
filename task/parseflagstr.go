@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MilosLin/go_bananas/module/validator"
+	"github.com/MilosLin/go_bananas/core/module/validator"
 )
 
 type ParseFlagStr struct {

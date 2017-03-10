@@ -22,18 +22,14 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 /**
  * 初始化路由
  */
-func InitRouting(server *echo.Echo) {
+func InitRouting(e *echo.Echo) {
 	v := validator.New()
-	server.Validator = &CustomValidator{validator: v}
-	server.Use(middleware.Logger())
-	server.Use(middleware.Recover())
-	server.Use(middleware.CORS())
-	server.POST("/api/SetGameConfig", controller.PostSetGameConfig)
-	server.GET("/api/wagers", controller.GetWagers)
-	server.GET("/api/wager/:game_seq_no", controller.GetWager)
-	server.GET("/api/ccu", controller.GetCCU)
-	server.GET("/api/financialreport", controller.GetFinancialReport)
-	server.GET("/api/supervisorreport", controller.GetSupervisorReport)
-	server.GET("/api/examinewager", controller.GetExamineWager)
-	server.GET("/api/abnormalwager", controller.GetAbnormalWager)
+	e.Validator = &CustomValidator{validator: v}
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.Use(middleware.CORS())
+	v1 := e.Group("/v1")
+	v1.Use()
+	v1.GET("/api/ping", controller.GetPing)
+
 }

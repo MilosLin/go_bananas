@@ -1,26 +1,26 @@
 package api
 
 import (
+	"github.com/MilosLin/go_bananas/api/router"
 	"github.com/MilosLin/go_bananas/core/config"
 	"github.com/MilosLin/go_bananas/core/model/database"
-	"github.com/api/router"
 
 	"github.com/labstack/echo"
 )
 
-type API_Service struct {
+type APIService struct {
 }
 
-func NewAPIService() *API_Service {
-	return &API_Service{}
+func NewAPIService() *APIService {
+	return &APIService{}
 }
 
 /**
  * 啟動API服務
  */
-func (s *API_Service) Start() {
+func (s *APIService) Start() {
 	defer database.CloseConn()
 	server := echo.New()
 	router.InitRouting(server)
-	server.Logger.Fatal(server.Start(":" + config.Instance().GetString("api.listen_port")))
+	server.Start(":" + config.Instance().GetString("api.listenPort"))
 }
