@@ -128,3 +128,45 @@ func TruncateOrder() int64 {
 	}
 	return rowCnt
 }
+
+func MultiInsertOrder(orders []dto.Order) (int64, int64) {
+	if len(orders) <= 0 {
+		return 0, 0
+	}
+
+	testM := database.GetConn("testDBM")
+
+	sql := "INSERT INTO `order`(`user_id`, `order_time`, `money`, `remark`) VALUES(?,?,?,?)"
+
+	for i := 0; i < (len(orders) - 1); i++ {
+		sql += ",(?,?,?,?)"
+	}
+	sql += ";"
+	var params []interface{}
+	for _, o := range orders {
+		params = append(params, o.UserID)
+		params = append(params, o.OrderTime)
+		params = append(params, o.Money.String())
+		params = append(params, o.Remark)
+	}
+
+	stmt, err := testM.Prepare(sql)
+
+	if err != nil {
+		logger.Fatal("Prepare SQL Failed", zap.Error(err), zap.Stack(""))
+	}
+	res, err := stmt.Exec(params...)
+	if err != nil {
+		logger.Fatal("Exec Stmt Failed", zap.Error(err))
+	}
+	lastId, err := res.LastInsertId()
+	if err != nil {
+		logger.Fatal("Get Last Insert Id Failed", zap.Error(err))
+	}
+	rowCnt, err := res.RowsAffected()
+	if err != nil {
+		logger.Fatal("Get Affected Rows Failed", zap.Error(err))
+	}
+
+	return lastId, rowCnt
+}

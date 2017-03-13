@@ -24,6 +24,8 @@ func Dispatch(name, argu *string) {
 		run(NewLogExample(), argu)
 	case "mysqlcuid": //mysql CUID範例
 		run(NewMysqlCUID(), argu)
+	case "mysqlinsertbenchmark": //mysql CUID範例
+		run(NewMysqlInsertBenchmark(), argu)
 	default:
 		logger.Fatal("Undefine task", zap.String("task", *name), zap.String("argu", *argu))
 	}
