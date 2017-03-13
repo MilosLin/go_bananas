@@ -4,18 +4,18 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
 	"github.com/MilosLin/go_bananas/core/config"
 	"github.com/MilosLin/go_bananas/core/logger"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 )
 
 func init() {
-	pool = make(map[string]*gorm.DB)
+	pool = make(map[string]*sql.DB)
 	if limit := config.Instance().GetInt("database.query_limit"); limit > 0 {
 		Query_limit = limit
 	} else {
@@ -23,7 +23,7 @@ func init() {
 	}
 }
 
-var pool map[string]*gorm.DB
+var pool map[string]*sql.DB
 var Query_limit int
 
 type DBConnPool struct {
@@ -32,12 +32,12 @@ type DBConnPool struct {
 /**
  * 依照資料庫名稱取得DB連線
  */
-func GetConn(db_name string) *gorm.DB {
+func GetConn(db_name string) *sql.DB {
 	if value, ok := pool[db_name]; ok {
 		return value
 	} else {
 		c := config.Instance()
-		group := fmt.Sprintf("database.%s", db_name)
+		group := "database." + db_name
 
 		conn_str := fmt.Sprintf(
 			"%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8&loc=UTC",
@@ -47,11 +47,15 @@ func GetConn(db_name string) *gorm.DB {
 			c.GetString(group+".port"),
 			c.GetString(group+".db"),
 		)
-		db, _ := gorm.Open("mysql", conn_str)
+		db, err := sql.Open("mysql", conn_str)
 
-		db.DB().SetMaxOpenConns(c.GetInt("database.max_open_conns"))
-		db.DB().SetMaxIdleConns(c.GetInt("database.max_idle_conns"))
-		db.DB().SetConnMaxLifetime(time.Second * c.GetDuration("database.conn_max_life_time"))
+		if err != nil {
+			logger.Fatal("Connect Database Failed", zap.Error(err), zap.String("conn_str", conn_str))
+		}
+
+		db.SetMaxOpenConns(c.GetInt("database.max_open_conns"))
+		db.SetMaxIdleConns(c.GetInt("database.max_idle_conns"))
+		db.SetConnMaxLifetime(time.Second * c.GetDuration("database.conn_max_life_time"))
 		pool[db_name] = db
 		return db
 	}
