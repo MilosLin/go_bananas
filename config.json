@@ -11,15 +11,15 @@
         "maxOpenConns": 50,
         "maxIdleConns": 20,
         "connMaxLifeTime": 60,
-        "backstageDBM": {
-            "db": "backstage_db",
+        "testDBM": {
+            "db": "test_db",
             "account": "root",
             "password": "root",
             "ip": "127.0.0.1",
             "port": 3306
         },
-        "backstageDBS": {
-            "db": "backstage_db",
+        "testDBS": {
+            "db": "test_db",
             "account": "root",
             "password": "root",
             "ip": "127.0.0.1",

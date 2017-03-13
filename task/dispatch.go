@@ -20,8 +20,10 @@ func Dispatch(name, argu *string) {
 		run(NewTaskTemplate(), argu)
 	case "parseflagstr": //flag字串解析
 		run(NewParseFlagStr(), argu)
-	case "logexample":
+	case "logexample": //zap用法
 		run(NewLogExample(), argu)
+	case "mysqlcuid": //mysql CUID範例
+		run(NewMysqlCUID(), argu)
 	default:
 		logger.Fatal("Undefine task", zap.String("task", *name), zap.String("argu", *argu))
 	}
