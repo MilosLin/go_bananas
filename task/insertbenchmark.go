@@ -24,6 +24,7 @@ func NewMysqlInsertBenchmark() *MysqlInsertBenchmark {
 // run task MysqlInsertBenchmark
 //
 // task --name=mysqlinsertbenchmark --argu="-num=150"
+// 測試一次insert多筆，與逐筆insert效能差異
 func (instance *MysqlInsertBenchmark) Run(argu *string) error {
 	argus := flag.NewFlagSet("argu", flag.ExitOnError)
 	argus.IntVar(&instance.Num, "num", 1000, "insert how many rows in once")
@@ -60,10 +61,11 @@ func (instance *MysqlInsertBenchmark) Run(argu *string) error {
 
 	fmt.Printf("start test multi insert... \n")
 	start = time.Now()
-	behavior.MultiInsertOrder(orders)
+	affectCount := behavior.MultiInsertOrder(orders)
 	stop = time.Now()
 	fmt.Printf("end test multi insert. latency:%v \n", stop.Sub(start))
 
+	fmt.Printf("affectCount:%v\n", affectCount)
 	// truncate table
 	behavior.TruncateOrder()
 	return nil

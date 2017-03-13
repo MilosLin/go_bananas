@@ -129,44 +129,51 @@ func TruncateOrder() int64 {
 	return rowCnt
 }
 
-func MultiInsertOrder(orders []dto.Order) (int64, int64) {
+// MultiInsertOrder
+//
+// 批次insert範例
+func MultiInsertOrder(orders []dto.Order) (rowCnt int64) {
 	if len(orders) <= 0 {
-		return 0, 0
+		return 0
 	}
 
 	testM := database.GetConn("testDBM")
 
-	sql := "INSERT INTO `order`(`user_id`, `order_time`, `money`, `remark`) VALUES(?,?,?,?)"
+	for cut := 0; cut < len(orders); cut += database.MaxBatchSQL {
+		startIndex := cut
+		endIndex := startIndex + database.MaxBatchSQL
+		if endIndex > len(orders) {
+			endIndex = len(orders)
+		}
+		sql := "INSERT INTO `order`(`user_id`, `order_time`, `money`, `remark`) VALUES(?,?,?,?)"
 
-	for i := 0; i < (len(orders) - 1); i++ {
-		sql += ",(?,?,?,?)"
-	}
-	sql += ";"
-	var params []interface{}
-	for _, o := range orders {
-		params = append(params, o.UserID)
-		params = append(params, o.OrderTime)
-		params = append(params, o.Money.String())
-		params = append(params, o.Remark)
-	}
+		for i := 0; i < (len(orders[startIndex:endIndex]) - 1); i++ {
+			sql += ",(?,?,?,?)"
+		}
+		sql += ";"
+		var params []interface{}
+		for _, o := range orders[startIndex:endIndex] {
+			params = append(params, o.UserID)
+			params = append(params, o.OrderTime)
+			params = append(params, o.Money.String())
+			params = append(params, o.Remark)
+		}
 
-	stmt, err := testM.Prepare(sql)
+		stmt, err := testM.Prepare(sql)
 
-	if err != nil {
-		logger.Fatal("Prepare SQL Failed", zap.Error(err), zap.Stack(""))
-	}
-	res, err := stmt.Exec(params...)
-	if err != nil {
-		logger.Fatal("Exec Stmt Failed", zap.Error(err))
-	}
-	lastId, err := res.LastInsertId()
-	if err != nil {
-		logger.Fatal("Get Last Insert Id Failed", zap.Error(err))
-	}
-	rowCnt, err := res.RowsAffected()
-	if err != nil {
-		logger.Fatal("Get Affected Rows Failed", zap.Error(err))
-	}
+		if err != nil {
+			logger.Fatal("Prepare SQL Failed", zap.Error(err), zap.Stack(""))
+		}
+		res, err := stmt.Exec(params...)
+		if err != nil {
+			logger.Fatal("Exec Stmt Failed", zap.Error(err))
+		}
 
-	return lastId, rowCnt
+		count, err := res.RowsAffected()
+		if err != nil {
+			logger.Fatal("Get Affected Rows Failed", zap.Error(err))
+		}
+		rowCnt += count
+	}
+	return
 }

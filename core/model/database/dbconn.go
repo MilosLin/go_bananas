@@ -14,19 +14,29 @@ import (
 	"go.uber.org/zap"
 )
 
+//資料庫連線物件
+var pool map[string]*sql.DB
+
+//查詢條件影響筆數上限
+var QueryLimit int
+
+//批次Insert/Update SQL筆數上限
+var MaxBatchSQL int
+
 func init() {
 	pool = make(map[string]*sql.DB)
-	if limit := config.Instance().GetInt("database.query_limit"); limit > 0 {
-		Query_limit = limit
+	c := config.Instance()
+	if limit := c.GetInt("database.queryLimit"); limit > 0 {
+		QueryLimit = limit
 	} else {
-		Query_limit = 500000
+		QueryLimit = 500000
 	}
-}
 
-var pool map[string]*sql.DB
-var Query_limit int
-
-type DBConnPool struct {
+	if maxBatchSQL := c.GetInt("database.maxBatchSQL"); maxBatchSQL > 0 {
+		MaxBatchSQL = maxBatchSQL
+	} else {
+		MaxBatchSQL = 500
+	}
 }
 
 /**
@@ -50,12 +60,12 @@ func GetConn(db_name string) *sql.DB {
 		db, err := sql.Open("mysql", conn_str)
 
 		if err != nil {
-			logger.Fatal("Connect Database Failed", zap.Error(err), zap.String("conn_str", conn_str))
+			logger.Fatal("Connect Database Failed", zap.Error(err), zap.String("connStr", conn_str))
 		}
 
-		db.SetMaxOpenConns(c.GetInt("database.max_open_conns"))
-		db.SetMaxIdleConns(c.GetInt("database.max_idle_conns"))
-		db.SetConnMaxLifetime(time.Second * c.GetDuration("database.conn_max_life_time"))
+		db.SetMaxOpenConns(c.GetInt("database.maxOpenConns"))
+		db.SetMaxIdleConns(c.GetInt("database.maxIdleConns"))
+		db.SetConnMaxLifetime(time.Second * c.GetDuration("database.connMaxLifeTime"))
 		pool[db_name] = db
 		return db
 	}

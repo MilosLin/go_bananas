@@ -11,6 +11,7 @@
         "maxOpenConns": 50,
         "maxIdleConns": 20,
         "connMaxLifeTime": 60,
+        "maxBatchSQL":1000 ,
         "testDBM": {
             "db": "test_db",
             "account": "root",
