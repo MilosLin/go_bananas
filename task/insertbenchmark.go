@@ -35,7 +35,7 @@ func (instance *MysqlInsertBenchmark) Run(argu *string) error {
 	}
 	fmt.Printf("prepare testing. num=%d \n", instance.Num)
 	// Prepare Testing. truncate table
-	behavior.TruncateOrder()
+	behavior.Order().TruncateOrder()
 
 	orders := []dto.Order{}
 	for i := 0; i < instance.Num; i++ {
@@ -52,21 +52,21 @@ func (instance *MysqlInsertBenchmark) Run(argu *string) error {
 	start := time.Now()
 	// insert data one by one
 	for _, o := range orders {
-		behavior.InsertOrder(o)
+		behavior.Order().InsertOrder(o)
 	}
 	stop := time.Now()
 	fmt.Printf("end test insert data one by one. latency:%v \n", stop.Sub(start))
 	// truncate table
-	behavior.TruncateOrder()
+	behavior.Order().TruncateOrder()
 
 	fmt.Printf("start test multi insert... \n")
 	start = time.Now()
-	affectCount := behavior.MultiInsertOrder(orders)
+	affectCount := behavior.Order().MultiInsertOrder(orders)
 	stop = time.Now()
 	fmt.Printf("end test multi insert. latency:%v \n", stop.Sub(start))
 
 	fmt.Printf("affectCount:%v\n", affectCount)
 	// truncate table
-	behavior.TruncateOrder()
+	behavior.Order().TruncateOrder()
 	return nil
 }

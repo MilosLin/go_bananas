@@ -9,7 +9,18 @@ import (
 	"go.uber.org/zap"
 )
 
-func InsertOrder(o dto.Order) (int64, int64) {
+type order struct{}
+
+var orderObj *order
+
+func Order() *order {
+	if orderObj == nil {
+		orderObj = new(order)
+	}
+	return orderObj
+}
+
+func (instance *order) InsertOrder(o dto.Order) (int64, int64) {
 	testM := database.GetConn("testDBM")
 
 	stmt, err := testM.Prepare("INSERT INTO `order`(`user_id`, `order_time`, `money`, `remark`) VALUES(?,?,?,?)")
@@ -32,7 +43,7 @@ func InsertOrder(o dto.Order) (int64, int64) {
 	return lastId, rowCnt
 }
 
-func GetOrderByMaxID(maxOID string) (ret []dto.Order) {
+func (instance *order) GetOrderByMaxID(maxOID string) (ret []dto.Order) {
 	testS := database.GetConn("testDBS")
 
 	stmt, err := testS.Prepare(
@@ -66,7 +77,7 @@ func GetOrderByMaxID(maxOID string) (ret []dto.Order) {
 	return
 }
 
-func UpdateMoneyByOID(OID, money string) (int64, int64) {
+func (instance *order) UpdateMoneyByOID(OID, money string) (int64, int64) {
 	testM := database.GetConn("testDBM")
 
 	stmt, err := testM.Prepare("UPDATE `order` SET `money` = ? WHERE `o_id` = ?")
@@ -89,7 +100,7 @@ func UpdateMoneyByOID(OID, money string) (int64, int64) {
 	return lastId, rowCnt
 }
 
-func DeleteOrderByOID(OID string) int64 {
+func (instance *order) DeleteOrderByOID(OID string) int64 {
 	testM := database.GetConn("testDBM")
 
 	stmt, err := testM.Prepare("DELETE FROM `order` WHERE `o_id` = ?")
@@ -109,7 +120,7 @@ func DeleteOrderByOID(OID string) int64 {
 	return rowCnt
 }
 
-func TruncateOrder() int64 {
+func (instance *order) TruncateOrder() int64 {
 	testM := database.GetConn("testDBM")
 
 	stmt, err := testM.Prepare("TRUNCATE TABLE `order`")
@@ -132,7 +143,7 @@ func TruncateOrder() int64 {
 // MultiInsertOrder
 //
 // 批次insert範例
-func MultiInsertOrder(orders []dto.Order) (rowCnt int64) {
+func (instance *order) MultiInsertOrder(orders []dto.Order) (rowCnt int64) {
 	if len(orders) <= 0 {
 		return 0
 	}

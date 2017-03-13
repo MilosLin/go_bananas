@@ -26,6 +26,8 @@ func Dispatch(name, argu *string) {
 		run(NewMysqlCUID(), argu)
 	case "mysqlinsertbenchmark": //mysql insert benchmark
 		run(NewMysqlInsertBenchmark(), argu)
+	case "mysqlnosqlexample": //mysql nosql example
+		run(NewMysqlNosqlExample(), argu)
 	default:
 		logger.Fatal("Undefine task", zap.String("task", *name), zap.String("argu", *argu))
 	}

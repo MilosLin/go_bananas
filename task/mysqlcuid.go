@@ -31,26 +31,26 @@ func (instance *MysqlCUID) Run(argu *string) error {
 			Money:     decimal.NewFromFloat(10),
 			Remark:    "Remark String",
 		}
-		behavior.InsertOrder(o)
+		behavior.Order().InsertOrder(o)
 	}
 
 	fmt.Printf("Insert 4 data into database\n")
 	// read data
-	instance.showOrder(behavior.GetOrderByMaxID("4"))
+	instance.showOrder(behavior.Order().GetOrderByMaxID("4"))
 
 	fmt.Printf("Update SET money=50 Where o_id=3 \n")
 	// update data by id
-	behavior.UpdateMoneyByOID("3", "50")
+	behavior.Order().UpdateMoneyByOID("3", "50")
 
 	fmt.Printf("Delete Where o_id=1 \n")
 	// delete data
-	behavior.DeleteOrderByOID("1")
+	behavior.Order().DeleteOrderByOID("1")
 
 	// read data again
-	instance.showOrder(behavior.GetOrderByMaxID("4"))
+	instance.showOrder(behavior.Order().GetOrderByMaxID("4"))
 
 	// truncate table
-	behavior.TruncateOrder()
+	behavior.Order().TruncateOrder()
 	return nil
 }
 
