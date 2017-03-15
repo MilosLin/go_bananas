@@ -1,6 +1,7 @@
 package cell
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -27,5 +28,27 @@ func Next5Min(current_time time.Time) (time.Time, error) {
 	} else {
 		current_time = current_time.Add(deduct_sec)
 	}
+	return current_time, nil
+}
+
+// 取當周周一，開始時間
+//
+// ex. input: 2017-03-15 16:12:08 output:2017-03-13 00:00:00
+func CurrentWeekStart(current_time time.Time) (time.Time, error) {
+	passByDays := [7]int{6, 0, 1, 2, 3, 4, 5}
+	passByDay := passByDays[int(current_time.Weekday())]
+
+	backtrack_str := fmt.Sprintf(
+		"-%dh%dm%ds",
+		current_time.Hour()+passByDay*24,
+		current_time.Minute(),
+		current_time.Second(),
+	)
+	if backtrack_dur, err := time.ParseDuration(backtrack_str); err != nil {
+		return current_time, err
+	} else {
+		current_time = current_time.Add(backtrack_dur)
+	}
+
 	return current_time, nil
 }
