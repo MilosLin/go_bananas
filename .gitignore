@@ -1,3 +1,4 @@
 .tags*
 log/*
 go_bananas
+vendor/*

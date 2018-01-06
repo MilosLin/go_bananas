@@ -10,7 +10,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-// Configuration for logging
+// LogConfig : Configuration for logging
 type LogConfig struct {
 	// Logger Level
 	Level string
@@ -119,7 +119,7 @@ func AtLevel(level zapcore.Level, msg string, fields ...zapcore.Field) {
 	}
 }
 
-// forge a logger instance
+// Forge a logger instance
 //
 // 依照log name取得log實例，logName需符合設定值
 func Forge(logName string) *zap.Logger {

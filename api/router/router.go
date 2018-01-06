@@ -10,18 +10,18 @@ import (
 )
 
 type (
+	// CustomValidator : 自訂驗證參數套件
 	CustomValidator struct {
 		validator *validator.Validate
 	}
 )
 
+// Validate : 自訂驗證參數方法
 func (cv *CustomValidator) Validate(i interface{}) error {
 	return cv.validator.Struct(i)
 }
 
-/**
- * 初始化路由
- */
+// InitRouting : 初始化路由
 func InitRouting(e *echo.Echo) {
 	v := validator.New()
 	e.Validator = &CustomValidator{validator: v}

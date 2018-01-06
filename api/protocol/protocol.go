@@ -4,14 +4,17 @@ package protocol
  * Error Code
  */
 const (
-	E_OK          = 0
-	E_UNKNOWN     = 1
-	E_WRONG_INPUT = 2
+	// ErrCodeOK : Success Response
+	ErrCodeOK = 0
+
+	// ErrCodeUnknown : Unhandle Error
+	ErrCodeUnknown = 1
+
+	// ErrCodeWrongInput : Wrong Inout
+	ErrCodeWrongInput = 2
 )
 
-/**
- * api 回應格式
- */
+// Response api 回應格式
 type Response struct {
 	Code    int8        `json:"code"`
 	Message string      `json:"message"`

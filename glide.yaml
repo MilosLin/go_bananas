@@ -1,0 +1,25 @@
+package: github.com/MilosLin/go_bananas
+import:
+- package: github.com/bitly/go-simplejson
+  version: ^0.5.0
+- package: github.com/go-sql-driver/mysql
+  version: ^1.3.0
+- package: github.com/labstack/echo
+  version: ^3.2.6
+  subpackages:
+  - middleware
+- package: github.com/olekukonko/tablewriter
+- package: github.com/shopspring/decimal
+  version: ^1.0.0
+- package: github.com/spf13/cobra
+  version: ^0.0.1
+- package: github.com/spf13/viper
+  version: ^1.0.0
+- package: go.uber.org/zap
+  version: ^1.7.1
+  subpackages:
+  - zapcore
+- package: gopkg.in/go-playground/validator.v9
+  version: ^9.9.2
+- package: gopkg.in/natefinch/lumberjack.v2
+  version: ^2.1.0

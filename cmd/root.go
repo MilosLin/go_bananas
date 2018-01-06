@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// RootCmd : Root Command
 var RootCmd = &cobra.Command{
 	Use:   "",
 	Short: "golang practice project",
@@ -16,6 +17,7 @@ var RootCmd = &cobra.Command{
 	},
 }
 
+// Execute : Execute Root Command
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)

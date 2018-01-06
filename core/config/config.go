@@ -1,10 +1,3 @@
-/**
- * 設定檔操作類別，固定讀取執行檔路徑下的 api-config.yml
- *
- *  Usage:
- * 	c := config.NewConfig()
- *	ip := c.Setting.GetString("ip")
- */
 package config
 
 import (
